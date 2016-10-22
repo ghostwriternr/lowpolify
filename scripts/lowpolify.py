@@ -9,6 +9,7 @@ import sys
 
 
 def getLowPoly(tris, highPolyImage):
+
     # define this in the other function so we can use the same vars
     def colorImage(tris, rv=None):
         for tri in tris:
@@ -18,6 +19,8 @@ def getLowPoly(tris, highPolyImage):
     # so tridex holds, for each pixel in [r*row+c] organization, each triangle
     # for each pixel
     # it's kind of a lookup table
+
+    print(highPolyImage.shape[:2])
     subs = np.transpose(np.where(np.ones(highPolyImage.shape[:2])))
     subs = subs[:, :2]
     tridex = tris.find_simplex(subs)
@@ -102,16 +105,22 @@ def preProcess(highPolyImage, newSize=None):
     return highPolyImage
 
 
-def helper(inImage, a, b, c, outImage=None, show=False):
+def helper(inImage, c, outImage=None, show=False):
 
     # Read the input image
     highPolyImage = cv2.imread(inImage)
     # Call 'preProcess' function
-    highPolyImage = preProcess(highPolyImage, newSize=500)
+    highPolyImage = preProcess(highPolyImage, newSize=600)
     # Read time passed since program begin (Non-essential)
     t = time.time()
+    # Use Otsu's method for calculating sobel thresholds
+    gray_image = cv2.cvtColor(highPolyImage, cv2.COLOR_BGR2GRAY)
+    highThresh, thresh_im = cv2.threshold(
+        gray_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    lowThresh = 0.1 * highThresh
     # Call 'getTriangulation' function
-    tris = getTriangulation(highPolyImage, a, b, c, debug=True)
+    tris = getTriangulation(highPolyImage, lowThresh,
+                            highThresh, c, debug=False)
     # Print time taken for triangulation (Non-essential)
     print(time.time() - t)
     # Read time passed since program begin (Non-essential)
@@ -143,8 +152,7 @@ def main(args):
         if len(args) == 2:
             outputImage = args[1]
         # Call helper function
-        helper(inImage=inputImage, a=100, b=75,
-               c=0.2, outImage=outputImage, show=True)
+        helper(inImage=inputImage, c=0.2, outImage=outputImage, show=True)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
