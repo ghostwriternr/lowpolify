@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css?family=Monoton');
+html,
+body {
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+body {
+    background: #ff6a80;
+    background: -webkit-linear-gradient(left, #ff6a80, #ff8f27);
+    background: -moz-linear-gradient(left, #ff6a80, #ff8f27);
+    background: -ms-linear-gradient(left, #ff6a80, #ff8f27);
+    background: -o-linear-gradient(left, #ff6a80, #ff8f27);
+    background: linear-gradient(to right, #ff6a80, #ff8f27);
+}
+
+.navbar-nav .active {
+	color: white;
+}
+
+.card-full {
+	min-height: 85vh;
+	margin-left: 2vw;
+	margin-right: 2vw;
+}
