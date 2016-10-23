@@ -1,5 +1,5 @@
 angular.module('fileUpload', ['ngFileUpload'])
-    .controller('uploadController', ['$scope', 'Upload', '$timeout', function($scope, Upload, $timeout) {
+    .controller('uploadController', ['$scope', 'Upload', 'Lowpolify', '$timeout', function($scope, Upload, Lowpolify, $timeout) {
         $scope.$watch('file', function() {
             $scope.upload($scope.file);
         });
@@ -8,6 +8,8 @@ angular.module('fileUpload', ['ngFileUpload'])
             $scope.f = file;
             $scope.errFile = errFiles && errFiles[0];
             if (file) {
+                var newName = file.name.substr(0, file.name.indexOf('.')) + '-' + Date.now() + '.' + file.name.split('.')[file.name.split('.').length - 1];
+                Upload.rename(file, newName);
                 Upload.upload({
                     url: '/api/upload',
                     method: 'POST',
@@ -15,8 +17,14 @@ angular.module('fileUpload', ['ngFileUpload'])
                     data: { file: file }
                 }).then(function(response) {
                     if (response.data.error_code === 0) {
-                        console.log(response);
-                        console.log('Success! ' + response.config.data.file.name + ' uploaded. Response: ');
+                        console.log('Success! ' + response.config.data.file.name + ' uploaded.');
+                        Lowpolify.makeLowPoly(newName)
+                            .success(function(data) {
+                                Lowpolify.getLowPoly(newName)
+                                    .success(function(data) {
+                                        $scope.outputFilePath = data;
+                                    });
+                            });
                     } else {
                         console.log(response.data.err_desc);
                     }

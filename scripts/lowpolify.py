@@ -1,9 +1,9 @@
-import time
 import cv2
 import numpy as np
 import scipy
 from scipy.spatial import Delaunay
 import sys
+import warnings
 
 
 # Returns low poly image
@@ -132,6 +132,7 @@ def helper(inImage, c, outImage=None, show=False):
         cv2.destroyAllWindows()
     if outImage is not None:
         cv2.imwrite(outImage, lowPolyImage)
+        print('Done')
 
 
 # Main function
@@ -139,7 +140,7 @@ def main(args):
 
     # No input image
     if len(args) < 1:
-        print('Invalid input')
+        print('Invalid')
     # Input image specified
     else:
         inputImage = args[0]
@@ -148,7 +149,8 @@ def main(args):
         if len(args) == 2:
             outputImage = args[1]
         # Call helper function
-        helper(inImage=inputImage, c=0.15, outImage=outputImage, show=True)
+        helper(inImage=inputImage, c=0.15, outImage=outputImage, show=False)
 
 if __name__ == '__main__':
+    warnings.filterwarnings("ignore")
     main(sys.argv[1:])

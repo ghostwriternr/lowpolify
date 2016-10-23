@@ -21,6 +21,8 @@
     <!-- load angular -->
     <script src="js/controller/file-upload.js"></script>
     <!-- load up our controller -->
+    <script src="js/services/low-polify.js"></script>
+    <!-- load our node service -->
     <script src="js/core.js"></script>
     <!-- load our main application -->
 </head>
@@ -60,6 +62,7 @@
                                 </div>
                                 <div class="col-xs-6 align-middle" align="center">
                                     <h4>Low poly output</h4>
+                                    <img ng-src="data:image/jpeg;base64,{{outputFilePath}}">
                                 </div>
                             </form>
                         </div>
