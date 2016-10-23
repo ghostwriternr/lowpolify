@@ -17,15 +17,16 @@
     <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- SPELLS -->
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <script src="/upload_module/ng-file-upload-all.min.js"></script>
     <!-- load angular -->
-    <script src="js/controller/main-controller.js"></script>
+    <script src="js/controller/file-upload.js"></script>
     <!-- load up our controller -->
     <script src="js/core.js"></script>
     <!-- load our main application -->
 </head>
 <!-- SET THE CONTROLLER -->
 
-<body ng-controller="mainController">
+<body>
     <nav class="navbar">
         <button class="navbar-toggler hidden-lg-up" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"></button>
         <div class="collapse navbar-toggleable-md" id="navbarResponsive">
@@ -43,7 +44,25 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="card card-full">
-                    <div class="card-block">
+                    <div class="card-block upload-container">
+                        <div class="row">
+                            <form ng-controller="uploadController">
+                                <div class="col-xs-6 align-middle" align="center">
+                                    <h4>Upload file here</h4>
+                                    <div ng-show="!file" type="file" name="file" ngf-drop ngf-select ng-model="file" class="drop-box" ngf-drag-over-class="'dragover'" ngf-allow-dir="true" accept="image/*" ngf-pattern="'image/*'">Drop image here or click to upload</div>
+                                    <img ng-show="file" type="file" name="file" ngf-drop ngf-select ng-model="file" class="drop-box" ngf-drag-over-class="'dragover'" ngf-allow-dir="true" accept="image/*" ngf-pattern="'image/*'" ngf-src="file" ngf-resize="{centerCrop: true}">
+                                    <div style="font:smaller">{{f.name}} {{errFile.name}} {{errFile.$error}} {{errFile.$errorParam}}
+                                        <span class="progress" ng-show="f.progress >= 0">
+                                            <!-- <div style="width:{{f.progress}}%" ng-bind="f.progress + '%'"></div> -->
+                                        </span>
+                                    </div>
+                                    <p>{{errorMsg}}</p>
+                                </div>
+                                <div class="col-xs-6 align-middle" align="center">
+                                    <h4>Low poly output</h4>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>

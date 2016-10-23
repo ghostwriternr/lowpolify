@@ -17,6 +17,8 @@ app.use(methodOverride('X-HTTP-Method-Override')); // override with the X-HTTP-M
 
 // redirections
 app.use('/scripts', express.static(__dirname + '/scripts/'));
+app.use('/imge_dump', express.static(__dirname + '/image_dump/'));
+app.use('/upload_module', express.static(__dirname + '/node_modules/ng-file-upload/dist/'));
 
 // routes ======================================================================
 require('./app/routes.js')(app);

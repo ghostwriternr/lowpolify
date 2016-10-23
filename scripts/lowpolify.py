@@ -148,7 +148,7 @@ def main(args):
         if len(args) == 2:
             outputImage = args[1]
         # Call helper function
-        helper(inImage=inputImage, c=0.1, outImage=outputImage, show=True)
+        helper(inImage=inputImage, c=0.15, outImage=outputImage, show=True)
 
 if __name__ == '__main__':
     main(sys.argv[1:])

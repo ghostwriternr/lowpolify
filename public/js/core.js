@@ -1,1 +1,1 @@
-angular.module('lowpolify', ['runController']);
+angular.module('lowpolify', ['fileUpload']);
