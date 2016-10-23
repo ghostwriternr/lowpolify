@@ -29,7 +29,7 @@ def getLowPoly(tris, highPolyImage):
             highPolyImage[tridex == tri, :], axis=0)
     # unint8 represents Unsigned integer (0 to 255)
     lowPolyImage = lowPolyImage.astype(np.uint8)
-    # return lowPolyImage
+    # return low-poly image
     return lowPolyImage
 
 
@@ -113,7 +113,7 @@ def helper(inImage, c, outImage=None, show=False):
     # Read the input image
     highPolyImage = cv2.imread(inImage)
     # Call 'preProcess' function
-    highPolyImage = preProcess(highPolyImage, newSize=600)
+    highPolyImage = preProcess(highPolyImage, newSize=750)
     # Use Otsu's method for calculating sobel thresholds
     gray_image = cv2.cvtColor(highPolyImage, cv2.COLOR_BGR2GRAY)
     highThresh, thresh_im = cv2.threshold(
@@ -148,7 +148,7 @@ def main(args):
         if len(args) == 2:
             outputImage = args[1]
         # Call helper function
-        helper(inImage=inputImage, c=0.2, outImage=outputImage, show=True)
+        helper(inImage=inputImage, c=0.1, outImage=outputImage, show=True)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
