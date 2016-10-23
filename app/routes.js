@@ -2,6 +2,12 @@ var fs = require('fs');
 var path = require('path');
 var multer = require('multer');
 var PythonShell = require('python-shell');
+var Clarifai = require('clarifai');
+var secrets = require('./secrets/secrets.json');
+var app = new Clarifai.App(
+    secrets.clientId,
+    secrets.clientSecret
+);
 
 var storage = multer.diskStorage({
     destination: function(req, file, cb) {

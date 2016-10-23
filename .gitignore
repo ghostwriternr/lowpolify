@@ -38,3 +38,6 @@ jspm_packages
 
 # Image dump folder
 image_dump
+
+# Secrets
+secrets

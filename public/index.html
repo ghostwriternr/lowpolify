@@ -46,26 +46,38 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="card card-full">
-                    <div class="card-block upload-container">
-                        <div class="row">
-                            <form ng-controller="uploadController">
-                                <div class="col-xs-6 align-middle" align="center">
+                    <div class="card-block">
+                        <form ng-controller="uploadController">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-6 align-middle" align="center">
                                     <h4>Upload file here</h4>
                                     <div ng-show="!file" type="file" name="file" ngf-drop ngf-select ng-model="file" class="drop-box" ngf-drag-over-class="'dragover'" ngf-allow-dir="true" accept="image/*" ngf-pattern="'image/*'">Drop image here or click to upload</div>
-                                    <img ng-show="file" type="file" name="file" ngf-drop ngf-select ng-model="file" class="drop-box" ngf-drag-over-class="'dragover'" ngf-allow-dir="true" accept="image/*" ngf-pattern="'image/*'" ngf-src="file" ngf-resize="{centerCrop: true}">
-                                    <div style="font:smaller">{{f.name}} {{errFile.name}} {{errFile.$error}} {{errFile.$errorParam}}
-                                        <span class="progress" ng-show="f.progress >= 0">
-                                            <!-- <div style="width:{{f.progress}}%" ng-bind="f.progress + '%'"></div> -->
+                                    <img ng-show="file" type="file" name="file" class="drop-box-full img-responsive" ngf-drop ngf-select ng-model="file" ngf-drag-over-class="'dragover'" ngf-allow-dir="true" accept="image/*" ngf-pattern="'image/*'" ngf-src="file" ngf-resize="{centerCrop: true}">
+                                    <div style="font:smaller; padding-left: 1vw; padding-right: 1vw; padding-top: 1vw;">{{errFile.name}} {{errFile.$error}} {{errFile.$errorParam}}
+                                        <span class="progress" ng-show="f.progress >= 0 && f.progress < 100">
+                                            <progress class="progress progress-striped progress-animated" value="{{f.progress}}" max="100">Uploaded: {{f.progress}}%</progress>
                                         </span>
                                     </div>
                                     <p>{{errorMsg}}</p>
-                                </div>
-                                <div class="col-xs-6 align-middle" align="center">
+                                </div><!--
+                                --><div class="col-xs-12 col-md-6 align-middle" align="center">
                                     <h4>Low poly output</h4>
-                                    <img ng-src="data:image/jpeg;base64,{{outputFilePath}}">
+                                    <svg ng-show="!outputFilePath" width='114px' height='114px' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="uil-triangle">
+                                        <rect x="0" y="0" width="100" height="100" fill="none" class="bk"></rect>
+                                        <path d="M34.5,52.4c-0.8,1.4-2.2,1.4-3,0L17.2,27.6C16.4,26.2,17,25,18.7,25h28.6c1.6,0,2.3,1.2,1.5,2.6L34.5,52.4z" fill="#ff6a80">
+                                            <animateTransform attributeName="transform" type="rotate" from="0 33 35" to="120 33 35" repeatCount="indefinite" dur="1s"></animateTransform>
+                                        </path>
+                                        <path d="M68.5,52.4c-0.8,1.4-2.2,1.4-3,0L51.2,27.6C50.4,26.2,51,25,52.7,25h28.6c1.7,0,2.3,1.2,1.5,2.6L68.5,52.4z" fill="#ff7d54">
+                                            <animateTransform attributeName="transform" type="rotate" from="0 67 35" to="120 67 35" repeatCount="indefinite" dur="1s"></animateTransform>
+                                        </path>
+                                        <path d="M51.5,82.4c-0.8,1.4-2.2,1.4-3,0L34.2,57.6C33.4,56.2,34,55,35.7,55h28.6c1.7,0,2.3,1.2,1.5,2.6L51.5,82.4z" fill="#ff8f27">
+                                            <animateTransform attributeName="transform" type="rotate" from="0 50 65" to="120 50 65" repeatCount="indefinite" dur="1s"></animateTransform>
+                                        </path>
+                                    </svg>
+                                    <img class="drop-box-full img-responsive" ng-src="data:image/jpeg;base64,{{outputFilePath}}">
                                 </div>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
