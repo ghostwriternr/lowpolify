@@ -29,9 +29,9 @@ In subtler terms, here's a TLDR for nothing:
 
 ## Sample output
 Coming soon. (seriously)
-Till then, watch this oddly satisying _SpectacularPerfectCygnet_. Which also happens to be the randomy generated name for this gif on imgur! :sparkling_heart::sparkling_heart:  
+Till then, watch this oddly satisying _SpectacularPerfectCygnet_. Which happens to be the randomy generated name for this gif on imgur! :sparkling_heart::sparkling_heart:  
 
-![Rocket](images/SpectacularPerfectCygnet.gif "SpectacularPerfectCygnet")
+![Rocket](images/SpectacularPerfectCygnet-size_restricted.gif "SpectacularPerfectCygnet")
 
 ## To-do
 - [ ] Add installation script
