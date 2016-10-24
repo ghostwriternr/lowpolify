@@ -2,12 +2,6 @@ var fs = require('fs');
 var path = require('path');
 var multer = require('multer');
 var PythonShell = require('python-shell');
-var Clarifai = require('clarifai');
-var secrets = require('./secrets/secrets.json');
-var app = new Clarifai.App(
-    secrets.clientId,
-    secrets.clientSecret
-);
 
 var storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -25,17 +19,19 @@ var upload = multer({
 module.exports = function(app) {
 
     app.post('/api/upload', function(req, res) {
-        console.log("Begin multer");
+        console.log("Begin upload");
         upload(req, res, function(err) {
             if (err) {
                 res.json({ error_code: 1, err_desc: err });
                 return;
             }
+            console.log("Upload Success");
             res.json({ error_code: 0, err_desc: null });
         })
     });
 
     app.post('/api/makeLowPoly/:name', function(req, res) {
+        console.log("Begin makeLowPoly");
         var options = {
             mode: 'text',
             scriptPath: 'scripts/',
@@ -43,6 +39,7 @@ module.exports = function(app) {
         };
         var pyshell = new PythonShell('lowpolify.py', options);
         pyshell.on('message', function(message) {
+            console.log("makeLowPoly successful");
             res.send(message);
         });
 
@@ -53,16 +50,13 @@ module.exports = function(app) {
     });
 
     app.get('/api/getLowPoly/:name', function(req, res) {
+        console.log("Begin getLowPoly");
         var img = path.resolve('image_dump/OutputDump/' + req.params.name);
         fs.readFile(img, function(err, data) {
             if (err) throw err;
+            console.log("getLowPoly successful");
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.end(new Buffer(data).toString('base64'));
         });
     });
-
-    app.get('*', function(req, res) {
-        res.sendFile(path.resolve('public/index.html'));
-    });
-
 };
