@@ -1,5 +1,5 @@
 angular.module('fileUpload', ['ngFileUpload'])
-    .controller('uploadController', ['$scope', 'Upload', 'Lowpolify', '$timeout', function($scope, Upload, Lowpolify, $timeout) {
+    .controller('uploadController', ['$scope', 'Upload', 'Lowpolify', 'UploadSuccess', '$timeout', function($scope, Upload, Lowpolify, UploadSuccess, $timeout) {
         $scope.$watch('file', function() {
             $scope.upload($scope.file);
         });
@@ -18,6 +18,7 @@ angular.module('fileUpload', ['ngFileUpload'])
                 }).then(function(response) {
                     if (response.data.error_code === 0) {
                         console.log('Success! ' + response.config.data.file.name + ' uploaded.');
+                        UploadSuccess.uploadedFile = newName;
                         Lowpolify.makeLowPoly(newName)
                             .success(function(data) {
                                 Lowpolify.getLowPoly(newName)

@@ -20,8 +20,11 @@
     <script src="/upload_module/ng-file-upload-all.min.js"></script>
     <!-- load angular -->
     <script src="js/controller/file-upload.js"></script>
+    <script src="js/controller/clarifai-interact.js"></script>
     <!-- load up our controller -->
+    <script src="js/services/upload-success.js"></script>
     <script src="js/services/low-polify.js"></script>
+    <script src="js/services/clarifai.js"></script>
     <!-- load our node service -->
     <script src="js/core.js"></script>
     <!-- load our main application -->
@@ -59,8 +62,10 @@
                                         </span>
                                     </div>
                                     <p>{{errorMsg}}</p>
-                                </div><!--
-                                --><div class="col-xs-12 col-md-6 align-middle" align="center">
+                                </div>
+                                <!--
+                                -->
+                                <div class="col-xs-12 col-md-6 align-middle" align="center">
                                     <h4>Low poly output</h4>
                                     <svg ng-show="!outputFilePath" width='114px' height='114px' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="uil-triangle">
                                         <rect x="0" y="0" width="100" height="100" fill="none" class="bk"></rect>
@@ -78,6 +83,8 @@
                                 </div>
                             </div>
                         </form>
+                        <div ng-controller="clarifaiController">
+                        </div>
                     </div>
                 </div>
             </div>

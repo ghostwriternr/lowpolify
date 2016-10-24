@@ -1,1 +1,1 @@
-angular.module('lowpolify', ['fileUpload', 'lowPolifyService']);
+angular.module('lowpolify', ['fileUpload', 'lowPolifyService', 'clarifaiInteract', 'clarifaiService', 'uploadSuccessService']);
