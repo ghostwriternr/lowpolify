@@ -28,10 +28,12 @@ In subtler terms, here's a TLDR for nothing:
 (That feels like an oversimplification, but ELI5 :baby: is the gold standard.)
 
 ## Sample output
-Coming soon. (seriously)
-Till then, watch this oddly satisying _SpectacularPerfectCygnet_. Which happens to be the randomy generated name for this gif on imgur! :sparkling_heart::sparkling_heart:  
+Coming soon. (seriously)  
+Till then, look at this adorable little fox, waiting for the sample output. Just like you! :sparkling_heart::sparkling_heart:  
 
-![Rocket](images/SpectacularPerfectCygnet-size_restricted.gif "SpectacularPerfectCygnet")
+<p>
+  <img src="images/foxy.gif" alt="foxy" longdesc="https://www.behance.net/gallery/40196323/The-Little-Fox"/>
+</p>
 
 ## To-do
 - [ ] Add installation script
