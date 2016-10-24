@@ -35,7 +35,38 @@ Till then, look at this adorable little fox, waiting for the sample output. Just
   <img src="images/foxy.gif" alt="foxy" longdesc="https://www.behance.net/gallery/40196323/The-Little-Fox"/>
 </p>
 
+## Dependencies
+- Node.js
+- Python3 (Along with the following python modules):
+    + cv2
+    + numpy
+    + scipy
+
+## How to use
+- Clone the repo
+```Shell
+git clone https://github.com/ghostwriternr/lowpolify
+```
+
+- Navigate into the cloned repository
+```Shell
+cd lowpolify
+```
+
+- Install all `npm` modules
+```Shell
+npm install
+```
+
+- Start the server using `node`
+```Shell
+node server.js
+```
+
+- Marvel at the beauty.
+
 ## To-do
+- [ ] Complete download implementation
 - [ ] Add installation script
 - [ ] Deploy to heroku
 - [ ] Add sliders to customize output

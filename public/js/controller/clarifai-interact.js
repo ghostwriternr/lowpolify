@@ -18,7 +18,7 @@ angular.module('clarifaiInteract', [])
             console.log("Calling getTags for " + file);
             Clarifai.getTags(file)
                 .success(function(data) {
-                    console.log(data);
-                })
+                    $scope.imageTags = data.slice(0, 10);
+                });
         };
     }]);

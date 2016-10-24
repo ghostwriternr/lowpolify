@@ -57,7 +57,7 @@ module.exports = function(app) {
                     } else {
                         body = JSON.parse(body);
                         console.log("getTags successful");
-                        res.json(body.results[0].result);
+                        res.json(body.results[0].result.tag.classes);
                     }
                 });
             }

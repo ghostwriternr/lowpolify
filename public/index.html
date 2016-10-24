@@ -83,7 +83,17 @@
                                 </div>
                             </div>
                         </form>
-                        <div ng-controller="clarifaiController">
+                        <div ng-controller="clarifaiController" ng-show="imageTags.length>0">
+                            <div class="row">
+                                <div class="col-xs-12" align="center">
+                                    <div class="btn-group" role="group" aria-label="Image tags">
+                                        <button ng-repeat="tag in imageTags" type="button" class="btn btn-outline-warning">{{tag}}</button>
+                                    </div>
+                                    <br/>
+                                    <br/>
+                                    <h5 style="color: #ff7d54;">Click on any of the above to save lowpoly image with the corresponding name</h5>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
