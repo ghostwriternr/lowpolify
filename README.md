@@ -63,7 +63,7 @@ npm install
 node server.js
 ```
 
-- Marvel at the beauty.
+- Marvel at the beauty served hot at http://localhost:8080/
 
 ## To-do
 - [ ] Complete download implementation
