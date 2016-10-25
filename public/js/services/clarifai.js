@@ -8,4 +8,4 @@ angular.module('clarifaiService', [])
                 return $http.post('/api/clarifai/getTags/' + imageName);
             }
         }
-    }])
+    }]);

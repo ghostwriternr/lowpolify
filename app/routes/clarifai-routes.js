@@ -56,8 +56,12 @@ module.exports = function(app) {
                         console.log(error);
                     } else {
                         body = JSON.parse(body);
-                        console.log("getTags successful");
-                        res.json(body.results[0].result.tag.classes);
+                        if (body.status_code == "TOKEN_EXPIRED")
+                            res.send("TokenExpired");
+                        else {
+                            console.log("getTags successful");
+                            res.json(body.results[0].result.tag.classes);
+                        }
                     }
                 });
             }

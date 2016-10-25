@@ -18,7 +18,17 @@ angular.module('clarifaiInteract', [])
             console.log("Calling getTags for " + file);
             Clarifai.getTags(file)
                 .success(function(data) {
-                    $scope.imageTags = data.slice(0, 10);
+                    $scope.clarifaiResponse = data;
+                    if (clarifaiResponse.status_code == "TOKEN_EXPIRED" || clarifaiResponse.status_code == "INVALID_TOKEN") {
+                        Clarifai.authenticate()
+                            .success(function(newToken) {
+                                Clarifai.getTags(file)
+                                    .success(function(data) {
+                                        $scope.imageTags = data.slice(0, 10);
+                                    })
+                            })
+                    } else
+                        $scope.imageTags = data.slice(0, 10);
                 });
         };
     }]);
