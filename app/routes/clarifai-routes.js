@@ -4,7 +4,6 @@ var request = require('request');
 var jsonfile = require('jsonfile');
 var secrets = "./app/secrets/secrets.json";
 var baseUrl = "https://api.clarifai.com/v1/";
-var systemProxy = "htttp://10.3.100.207:8080";
 var clarifai = require(path.resolve(secrets));
 
 module.exports = function(app) {
@@ -60,7 +59,7 @@ module.exports = function(app) {
                             res.send("TokenExpired");
                         else {
                             console.log("getTags successful");
-                            res.json(body.results[0].result.tag.classes);
+                            res.json(body);
                         }
                     }
                 });

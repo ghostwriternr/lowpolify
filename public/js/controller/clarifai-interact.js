@@ -19,16 +19,16 @@ angular.module('clarifaiInteract', [])
             Clarifai.getTags(file)
                 .success(function(data) {
                     $scope.clarifaiResponse = data;
-                    if (clarifaiResponse.status_code == "TOKEN_EXPIRED" || clarifaiResponse.status_code == "INVALID_TOKEN") {
+                    if ($scope.clarifaiResponse.status_code == "TOKEN_EXPIRED" || $scope.clarifaiResponse.status_code == "INVALID_TOKEN") {
                         Clarifai.authenticate()
                             .success(function(newToken) {
                                 Clarifai.getTags(file)
-                                    .success(function(data) {
-                                        $scope.imageTags = data.slice(0, 10);
-                                    })
-                            })
+                                    .success(function(newData) {
+                                        $scope.imageTags = newData.results[0].result.tag.classes.slice(0, 10);
+                                    });
+                            });
                     } else
-                        $scope.imageTags = data.slice(0, 10);
+                        $scope.imageTags = $scope.clarifaiResponse.results[0].result.tag.classes.slice(0, 10);
                 });
         };
     }]);

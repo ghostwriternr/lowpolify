@@ -100,10 +100,11 @@ def preProcess(highPolyImage, newSize=None):
             [highPolyImage, highPolyImage, highPolyImage])
     # Resize image. Easier to process.
     if newSize is not None:
-        scale = newSize / float(np.max(highPolyImage.shape[:2]))
-        highPolyImage = cv2.resize(
-            highPolyImage, (0, 0), fx=scale, fy=scale,
-            interpolation=cv2.INTER_CUBIC)
+        if newSize < np.max(highPolyImage.shape[:2]):
+            scale = newSize / float(np.max(highPolyImage.shape[:2]))
+            highPolyImage = cv2.resize(
+                highPolyImage, (0, 0), fx=scale, fy=scale,
+                interpolation=cv2.INTER_AREA)
     return highPolyImage
 
 

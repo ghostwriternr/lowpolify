@@ -3,7 +3,7 @@
 @import url('https://fonts.googleapis.com/css?family=Monoton');
 html,
 body {
-    overflow-y: hidden;
+    /*overflow-y: hidden;*/
     overflow-x: hidden;
 }
 
