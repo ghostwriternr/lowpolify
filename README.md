@@ -30,30 +30,13 @@ In subtler terms, here's a TLDR for nothing:
 ## Sample output
 Lo and Behold!
 
-<p>
-  <img src="images/Deepika-In.jpg" alt="Deepika Padukone"/>
-  <img src="images/Deepika-Out.jpg" alt="Deepika Padukone"/>
-</p>
-
-<p>
-  <img src="images/Jon-In.jpg" alt="Jon Snow"/>
-  <img src="images/Jon-Out.jpg" alt="Jon Snow"/>
-</p>
-
-<p>
-  <img src="images/Leo-In.jpg" alt="Leonardo DiCaprio"/>
-  <img src="images/Leo-Out.jpg" alt="Leonardo DiCaprio"/>
-</p>
-
-<p>
-  <img src="images/Wall-E-In.jpg" alt="Wall-E"/>
-  <img src="images/Wall-E-Out.jpg" alt="Wall-E"/>
-</p>
-
-<p>
-  <img src="images/Woman-In.jpg" alt="Gorgeous Woman"/>
-  <img src="images/Woman-Out.jpg" alt="Gorgeous Woman"/>
-</p>
+| High-poly input | Low-poly output |
+| :---: |:---:|
+| ![Deepika Padukone](images/Deepika-In.jpg) | ![Deepika Padukone](images/Deepika-Out.jpg) |
+| ![Jon Snow](images/Jon-In.jpg) | ![Jon Snow](images/Jon-Out.jpg) |
+| ![Leonardo DiCaprio](images/Leo-In.jpg) | ![Leonardo DiCaprio](images/Leo-Out.jpg) |
+| ![Wall-E](images/Wall-E-In.jpg) | ![Wall-E](images/Wall-E-Out.jpg) |
+| ![Gorgeous Woman](images/Woman-In.jpg) | ![Gorgeous Woman](images/Woman-Out.jpg) |
 
 ## Screenshots
 Now everybody loves to see the master at work, right? Right?? AMIRITE???  
