@@ -23,6 +23,7 @@ module.exports = function(app) {
                 var obj = {};
                 obj["clientId"] = clarifai.clientId;
                 obj["clientSecret"] = clarifai.clientSecret;
+                body = JSON.parse(body);
                 obj["access"] = body;
                 jsonfile.writeFileSync(secrets, obj);
                 clarifai = obj;
@@ -56,7 +57,7 @@ module.exports = function(app) {
                     } else {
                         body = JSON.parse(body);
                         if (body.status_code == "TOKEN_EXPIRED")
-                            res.send("TokenExpired");
+                            res.json(body);
                         else {
                             console.log("getTags successful");
                             res.json(body);
