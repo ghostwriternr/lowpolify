@@ -8,7 +8,6 @@ var storage = multer.diskStorage({
         cb(null, path.resolve('image_dump/InputDump/'))
     },
     filename: function(req, file, cb) {
-        var datetimestamp = Date.now();
         cb(null, file.originalname)
     }
 });
