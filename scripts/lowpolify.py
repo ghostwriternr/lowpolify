@@ -131,6 +131,10 @@ def helper(inImage, c, outImage=None, show=False):
                             highThresh, c, debug=False)
     # Call 'getLowPoly' function
     lowPolyImage = getLowPoly(tris, highPolyImage)
+    if np.max(highPolyImage.shape[:2]) < 750:
+        scale = 750 / float(np.max(highPolyImage.shape[:2]))
+        lowPolyImage = cv2.resize(lowPolyImage, None, fx=scale,
+                                  fy=scale, interpolation=cv2.INTER_CUBIC)
 
     if show:
         compare = np.hstack([highPolyImage, lowPolyImage])
