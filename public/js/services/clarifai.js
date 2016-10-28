@@ -6,6 +6,9 @@ angular.module('clarifaiService', [])
             },
             getTags: function(imageName) {
                 return $http.post('/api/clarifai/getTags/' + imageName);
+            },
+            download: function(tagName, imageName) {
+                return $http.get('/api/clarifai/tagDownload/' + tagName + "/" + imageName);
             }
         }
     }]);

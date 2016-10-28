@@ -1,5 +1,5 @@
 angular.module('clarifaiInteract', [])
-    .controller('clarifaiController', ['$scope', '$http', 'Clarifai', 'UploadSuccess', function($scope, $http, Clarifai, UploadSuccess) {
+    .controller('clarifaiController', ['$scope', '$http', '$window', 'Clarifai', 'UploadSuccess', function($scope, $http, $window, Clarifai, UploadSuccess) {
         $scope.newName = UploadSuccess.uploadedFile;
 
         $scope.$watch(
@@ -31,4 +31,10 @@ angular.module('clarifaiInteract', [])
                         $scope.imageTags = $scope.clarifaiResponse.results[0].result.tag.classes.slice(0, 10);
                 });
         };
+
+        $scope.download = function(tagName) {
+            tagName = tagName.replace(/\W+/g, '-');
+            path = "/api/clarifai/tagDownload/" + tagName + "/" + UploadSuccess.uploadedFile;
+            $window.location.href = path;
+        }
     }]);

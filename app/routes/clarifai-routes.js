@@ -1,5 +1,6 @@
 var fs = require('fs');
 var path = require('path');
+var mime = require('mime');
 var request = require('request');
 var jsonfile = require('jsonfile');
 var secrets = "./app/secrets/secrets.json";
@@ -65,6 +66,21 @@ module.exports = function(app) {
                     }
                 });
             }
+        });
+    });
+
+    app.get('/api/clarifai/tagDownload/:tagName/:imageName', function(req, res) {
+        console.log("Begin download");
+        var img = path.resolve('image_dump/OutputDump/' + req.params.imageName);
+        var mimetype = mime.lookup(img);
+
+        res.setHeader('Content-disposition', 'attachment; filename=' + req.params.tagName + path.extname(img));
+        res.setHeader('Content-type', mimetype);
+
+        var filestream = fs.createReadStream(img);
+        filestream.pipe(res);
+        res.on('finish', function() {
+            console.log("Download complete");
         });
     });
 };

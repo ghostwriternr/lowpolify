@@ -7,6 +7,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <base href="/">
     <!-- Optimize mobile viewport -->
     <title>Lowpolify</title>
     <!-- SCROLLS -->
@@ -16,7 +17,8 @@
     <link rel="stylesheet" href="css/github-corners.css">
     <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- SPELLS -->
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular-route.min.js"></script>
     <script src="/upload_module/ng-file-upload-all.min.js"></script>
     <!-- load angular -->
     <script src="js/controller/file-upload.js"></script>
@@ -87,7 +89,7 @@
                             <div class="row">
                                 <div class="col-xs-12" align="center">
                                     <div class="btn-group" role="group" aria-label="Image tags">
-                                        <button ng-repeat="tag in imageTags" type="button" class="btn btn-outline-warning">{{tag}}</button>
+                                        <button ng-repeat="tag in imageTags" type="button" class="btn btn-outline-warning" ng-click="download(tag)">{{tag}}</button>
                                     </div>
                                     <br/>
                                     <br/>
