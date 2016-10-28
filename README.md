@@ -28,12 +28,36 @@ In subtler terms, here's a TLDR for nothing:
 (That feels like an oversimplification, but ELI5 :baby: is the gold standard.)
 
 ## Sample output
-Coming soon. (seriously)  
-Till then, look at this adorable little fox, waiting for the sample output. Just like you! :sparkling_heart::sparkling_heart:  
+Lo and Behold!
 
 <p>
-  <img src="images/foxy.gif" alt="foxy" longdesc="https://www.behance.net/gallery/40196323/The-Little-Fox"/>
+  <img src="images/Deepika-In.jpg" alt="Deepika Padukone"/>
+  <img src="images/Deepika-Out.jpg" alt="Deepika Padukone"/>
 </p>
+
+<p>
+  <img src="images/Jon-In.jpg" alt="Jon Snow"/>
+  <img src="images/Jon-Out.jpg" alt="Jon Snow"/>
+</p>
+
+<p>
+  <img src="images/Leo-In.jpg" alt="Leonardo DiCaprio"/>
+  <img src="images/Leo-Out.jpg" alt="Leonardo DiCaprio"/>
+</p>
+
+<p>
+  <img src="images/Wall-E-In.jpg" alt="Wall-E"/>
+  <img src="images/Wall-E-Out.jpg" alt="Wall-E"/>
+</p>
+
+<p>
+  <img src="images/Woman-In.jpg" alt="Gorgeous Woman"/>
+  <img src="images/Woman-Out.jpg" alt="Gorgeous Woman"/>
+</p>
+
+## Screenshots
+Now everybody loves to see the master at work, right? Right?? AMIRITE???  
+![Screenshot](images/Screenshot.png "Screenshot")
 
 ## Dependencies
 - Node.js
@@ -71,10 +95,16 @@ node server.js
 - [ ] Deploy to heroku
 - [ ] Add sliders to customize output
 - [ ] Use python multiprocessing to speed-up output
-- [ ] Background subtraction for portraits
 
 ## But WHY :grey_question::grey_exclamation:
 The professor might not be very interested in awarding me full scores for the **CS40019 Image Processing** term project, appreciating my mere physical presence. It's always safe to have a backup. **_wink wink_** :wink: **_nudge nudge_** :smirk:
 
 ## License
 MIT :eyeglasses:
+
+## Psst
+In case you too got bored reading this README, foxy here wants to give you a hugsy!  
+
+<p>
+  <img src="images/foxy.gif" alt="foxy" longdesc="https://www.behance.net/gallery/40196323/The-Little-Fox"/>
+</p>
