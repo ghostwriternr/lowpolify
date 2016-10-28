@@ -18,7 +18,7 @@ def getLowPoly(tris, highPolyImage):
     tridex = tris.find_simplex(subs)
     # Array of image dimensions with mapping to the repective simplices.
     tridex = tridex.reshape(highPolyImage.shape[:2])
-    # Retrieve the unique simplices from tridex -> Doesn't contain all values?
+    # Retrieve the unique simplices from tridex
     pTris = np.unique(tridex)
     # Initialize output image (3-channel)
     lowPolyImage = np.zeros(highPolyImage.shape)
@@ -81,6 +81,8 @@ def getTriangulation(im, a=50, b=55, c=0.15, debug=False):
     pts = np.vstack([pts, [rMax, 0]])
     # Append (rMax,cMax) to the vertical stack
     pts = np.vstack([pts, [rMax, cMax]])
+    # Append some random points to fill empty spaces
+    pts = np.vstack([pts, np.random.randint(0, 750, size=(100, 2))])
     # Construct Delaunay Triangulation from these set of points.
     # Reference: https://en.wikipedia.org/wiki/Delaunay_triangulation
     tris = Delaunay(pts)
@@ -105,6 +107,10 @@ def preProcess(highPolyImage, newSize=None):
             highPolyImage = cv2.resize(
                 highPolyImage, (0, 0), fx=scale, fy=scale,
                 interpolation=cv2.INTER_AREA)
+    # Reduce noise in image using cv::cuda::fastNlMeansDenoisingColored
+    # Reference: http://www.ipol.im/pub/art/2011/bcm_nlm/
+    highPolyImage = cv2.fastNlMeansDenoisingColored(
+        highPolyImage, None, 10, 10, 7, 21)
     return highPolyImage
 
 
