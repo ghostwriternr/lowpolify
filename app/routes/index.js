@@ -6,22 +6,26 @@ var cleaner = schedule.scheduleJob('0 * * * * *', function() {
     fs.readdir('image_dump/OutputDump/', function(err, files) {
         if (err) throw err;
         files.forEach(function(file) {
-        	var filename = file;
+            var filename = file;
             filename = filename.substr(0, filename.indexOf('.'));
-            var timestamp = filename.substr(filename.indexOf('-') + 1);
-            if (Date.now() - timestamp >= 900000){
-            	fs.unlink('image_dump/OutputDump/' + file);
+            if (filename.length > 0) {
+                var timestamp = filename.substr(filename.lastIndexOf('-') + 1);
+                if (Date.now() - timestamp >= 900000) {
+                    fs.unlink('image_dump/OutputDump/' + file);
+                }
             }
         });
     });
     fs.readdir('image_dump/InputDump/', function(err, files) {
         if (err) throw err;
         files.forEach(function(file) {
-        	var filename = file;
+            var filename = file;
             filename = filename.substr(0, filename.indexOf('.'));
-            var timestamp = filename.substr(filename.indexOf('-') + 1);
-            if (Date.now() - timestamp >= 900000){
-            	fs.unlink('image_dump/InputDump/' + file);
+            if (filename.length > 0) {
+                var timestamp = filename.substr(filename.lastIndexOf('-') + 1);
+                if (Date.now() - timestamp >= 900000) {
+                    fs.unlink('image_dump/InputDump/' + file);
+                }
             }
         });
     });

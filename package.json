@@ -1,34 +1,47 @@
 {
-  "name": "lowpolify",
-  "version": "1.0.0",
-  "description": "Create low-poly art from any image",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ghostwriternr/lowpolify.git"
-  },
-  "keywords": [
-    "low-poly"
-  ],
-  "author": "ghostwriternr",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ghostwriternr/lowpolify/issues"
-  },
-  "homepage": "https://github.com/ghostwriternr/lowpolify#readme",
-  "dependencies": {
-    "body-parser": "^1.15.2",
-    "express": "^4.14.0",
-    "jsonfile": "^2.4.0",
-    "method-override": "^2.3.6",
-    "morgan": "^1.7.0",
-    "multer": "^1.2.0",
-    "ng-file-upload": "^12.2.12",
-    "python-shell": "^0.4.0",
-    "request": "^2.75.0"
-  }
+    "name": "lowpolify",
+    "version": "1.0.0",
+    "description": "Create low-poly art from any image",
+    "main": "server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node server.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ghostwriternr/lowpolify.git"
+    },
+    "keywords": [
+        "low-poly"
+    ],
+    "author": "ghostwriternr",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/ghostwriternr/lowpolify/issues"
+    },
+    "homepage": "https://github.com/ghostwriternr/lowpolify#readme",
+    "dependencies": {
+        "body-parser": "^1.15.2",
+        "express": "^4.14.0",
+        "jsonfile": "^2.4.0",
+        "method-override": "^2.3.6",
+        "mime": "^1.3.4",
+        "morgan": "^1.7.0",
+        "multer": "^1.2.0",
+        "ng-file-upload": "^12.2.12",
+        "node-schedule": "^1.2.0",
+        "python-shell": "^0.4.0",
+        "request": "^2.75.0"
+    },
+    "devDependencies": {
+        "jshint": "^2.9.4"
+    },
+    "scripts": {
+        "start": "node server.js",
+        "test": "jshint server.js"
+    },
+    "engines": {
+        "node": "4.5.0",
+        "npm": "3.10.9"
+    }
 }

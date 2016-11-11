@@ -4,6 +4,23 @@ import scipy
 from scipy.spatial import Delaunay
 import sys
 import warnings
+from multiprocessing import Process
+import sharedmem
+
+
+# Splits a list into n chunks
+
+def chunk(l, n):
+    for i in range(0, len(l), n):
+        yield l[i:i + n]
+
+
+# Generates a portion of the final image
+
+def builder(part, tridex, lowPolyImage, highPolyImage):
+    for tri in part:
+        lowPolyImage[tridex == tri, :] = np.mean(
+            highPolyImage[tridex == tri, :], axis=0)
 
 
 # Returns low poly image
@@ -20,13 +37,22 @@ def getLowPoly(tris, highPolyImage):
     tridex = tridex.reshape(highPolyImage.shape[:2])
     # Retrieve the unique simplices from tridex
     pTris = np.unique(tridex)
+    # Split the list into multiple parts, to enable parallel processing
+    chunks = list(chunk(pTris, len(pTris) // 4))
     # Initialize output image (3-channel)
-    lowPolyImage = np.zeros(highPolyImage.shape)
     # lowPolyImage contains mean of all such points from highPolyimage, where
     # tridex = tri
-    for tri in pTris:
-        lowPolyImage[tridex == tri, :] = np.mean(
-            highPolyImage[tridex == tri, :], axis=0)
+    lowPolyImage = sharedmem.empty(highPolyImage.shape)
+    lowPolyImage.fill(0)
+    # Start 4 different processes to simultaneouly process different simplices
+    processes = [Process(target=builder, args=(
+        chunks[i], tridex, lowPolyImage, highPolyImage)) for i in range(4)]
+    # Start each process
+    for p in processes:
+        p.start()
+    # Wait for all process to finish
+    for p in processes:
+        p.join()
     # unint8 represents Unsigned integer (0 to 255)
     lowPolyImage = lowPolyImage.astype(np.uint8)
     # return low-poly image
@@ -121,7 +147,7 @@ def helper(inImage, c, outImage=None, show=False):
     highPolyImage = cv2.imread(inImage)
     # Call 'preProcess' function
     highPolyImage = preProcess(highPolyImage, newSize=750)
-    # Use Otsu's method for calculating sobel thresholds
+    # Use Otsu's method for calculating thresholds
     gray_image = cv2.cvtColor(highPolyImage, cv2.COLOR_BGR2GRAY)
     highThresh, thresh_im = cv2.threshold(
         gray_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)

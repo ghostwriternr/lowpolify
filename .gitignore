@@ -36,7 +36,7 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 
-# Image dump folder
+# Image dump
 image_dump
 
 # Secrets

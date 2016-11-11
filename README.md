@@ -1,5 +1,15 @@
 # lowpolify
 
+<p align="center">
+  <img src="https://img.shields.io/npm/v/npm.svg?maxAge=2592000" alt="npm version">
+
+  <img src="https://travis-ci.org/ghostwriternr/lowpolify.svg?branch=master" alt="Build Status">
+
+  <img src="https://heroku-badge.herokuapp.com/?app=lowpolify" alt="Deployment Status">
+
+  <img src="https://img.shields.io/npm/l/express.svg" alt="License">
+</p>
+
 > “I’ve been waiting for you, Obi-Wan. We meet again, at last. The circle is now complete. When I left you, I was but the learner; now I am the master.” :sunglasses::sunglasses::sunglasses:
 
 ![Warrior](images/welcome.gif "Warrior")
@@ -14,6 +24,9 @@ Now what is 'low poly' you may ask.
 Guessed that. Haa! :grin:  
 
 Here's what Wikipedia has for you: _Low poly is a polygon mesh in 3D computer graphics that has a relatively small number of polygons. Low poly meshes occur in real-time applications (e.g. games) and contrast with high poly meshes in animated movies and special effects of the same era. The term low poly is used in both a techni..._ **_yada yada yada_** you get the idea. :information_desk_person::information_desk_person:  
+
+And if you'd like to skip all the chit chat, here's the **DEMO**. _Arr, matey, thar be ye booty!_
+http://lowpolify.herokuapp.com/
 
 ## Approach
 Take an image, lowpolify it and **poof**!! :boom: LOW POLY, BABY!! :dancer::dancer:  
@@ -48,6 +61,7 @@ Now everybody loves to see the master at work, right? Right?? AMIRITE???
     + cv2
     + numpy
     + scipy
+    + sharedmem
 
 ## How to use
 - Clone the repo
@@ -73,11 +87,7 @@ node server.js
 - Marvel at the beauty served hot at http://localhost:8080/
 
 ## To-do
-- [ ] Complete download implementation
-- [ ] Add installation script
-- [ ] Deploy to heroku
 - [ ] Add sliders to customize output
-- [ ] Use python multiprocessing to speed-up output
 
 ## But WHY :grey_question::grey_exclamation:
 The professor might not be very interested in awarding me full scores for the **CS40019 Image Processing** term project, appreciating my mere physical presence. It's always safe to have a backup. **_wink wink_** :wink: **_nudge nudge_** :smirk:

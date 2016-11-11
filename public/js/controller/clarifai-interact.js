@@ -19,7 +19,7 @@ angular.module('clarifaiInteract', [])
             Clarifai.getTags(file)
                 .success(function(data) {
                     $scope.clarifaiResponse = data;
-                    if ($scope.clarifaiResponse.status_code == "TOKEN_EXPIRED" || $scope.clarifaiResponse.status_code == "INVALID_TOKEN") {
+                    if ($scope.clarifaiResponse.status_code == "TOKEN_EXPIRED" || $scope.clarifaiResponse.status_code == "TOKEN_INVALID" || $scope.clarifaiResponse.status_code == "TOKEN_APP_INVALID") {
                         Clarifai.authenticate()
                             .success(function(newToken) {
                                 Clarifai.getTags(file)

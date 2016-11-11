@@ -57,6 +57,7 @@ module.exports = function(app) {
                         console.log(error);
                     } else {
                         body = JSON.parse(body);
+                        console.log(body);
                         if (body.status_code == "TOKEN_EXPIRED")
                             res.json(body);
                         else {
