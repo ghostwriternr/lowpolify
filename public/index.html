@@ -55,6 +55,11 @@
                 <div class="card card-full">
                     <div class="card-block">
                         <form ng-controller="uploadController">
+                            <div class="row" ng-show="outputFilePath.length>0">
+                                <div class="col-xs-10 offset-xs-1" style="margin-bottom: 50px;">
+                                    <rzslider rz-slider-model="slider.value" rz-slider-options="slider.options"></rzslider>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-xs-12 col-md-6 align-middle" align="center">
                                     <h4>Upload file here</h4>
@@ -84,11 +89,6 @@
                                         </path>
                                     </svg>
                                     <img class="drop-box-full img-responsive" ng-src="data:image/jpeg;base64,{{outputFilePath}}">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-10 offset-xs-1">
-                                    <rzslider rz-slider-model="slider.value" rz-slider-options="slider.options"></rzslider>
                                 </div>
                             </div>
                         </form>

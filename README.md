@@ -86,9 +86,6 @@ node server.js
 
 - Marvel at the beauty served hot at http://localhost:8080/
 
-## To-do
-- [ ] Add sliders to customize output
-
 ## But WHY :grey_question::grey_exclamation:
 The professor might not be very interested in awarding me full scores for the **CS40019 Image Processing** term project, appreciating my mere physical presence. It's always safe to have a backup. **_wink wink_** :wink: **_nudge nudge_** :smirk:
 

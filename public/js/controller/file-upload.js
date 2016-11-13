@@ -11,14 +11,27 @@ angular.module('fileUpload', ['ngFileUpload', 'rzModule'])
             options: {
                 floor: 0,
                 ceil: 100,
+                step: 5,
                 id: 'slider-id',
                 showSelectionBar: true,
                 disabled: false,
-                getSelectionBarColor: function() {
-                    return 'orange';
+                getSelectionBarColor: function(value) {
+                    if (value <= 10)
+                        return '#ff8f27';
+                    if (value <= 20)
+                        return '#00da69';
+                    if (value <= 30)
+                        return '#ff8f27';
+                    return '#ff272b';
                 },
-                getPointerColor: function() {
-                    return 'pink'
+                getPointerColor: function(value) {
+                    if (value <= 10)
+                        return '#ff8f27';
+                    if (value <= 20)
+                        return '#00da69';
+                    if (value <= 30)
+                        return '#ff8f27';
+                    return '#ff272b';
                 },
                 onStart: function(id) {
                     console.log('Slider start');
@@ -36,7 +49,17 @@ angular.module('fileUpload', ['ngFileUpload', 'rzModule'])
                                     $scope.outputFilePath = data;
                                 });
                         });
-                }
+                },
+                showTicksValues: true,
+                stepsArray: [
+                    { value: 0, legend: 'Low' },
+                    { value: 15, legend: 'Ideal' },
+                    { value: 30, legend: 'High' },
+                    { value: 45 },
+                    { value: 60 },
+                    { value: 75 },
+                    { value: 90, legend: 'Extreme' }
+                ]
             }
         };
 
