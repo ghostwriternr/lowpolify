@@ -16,10 +16,12 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/github-corners.css">
     <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" type="text/css" href="/slider_module/rzslider.min.css" />
     <!-- SPELLS -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular-route.min.js"></script>
     <script src="/upload_module/ng-file-upload-all.min.js"></script>
+    <script src="/slider_module/rzslider.min.js"></script>
     <!-- load angular -->
     <script src="js/controller/file-upload.js"></script>
     <script src="js/controller/clarifai-interact.js"></script>
@@ -82,6 +84,11 @@
                                         </path>
                                     </svg>
                                     <img class="drop-box-full img-responsive" ng-src="data:image/jpeg;base64,{{outputFilePath}}">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-10 offset-xs-1">
+                                    <rzslider rz-slider-model="slider.value" rz-slider-options="slider.options"></rzslider>
                                 </div>
                             </div>
                         </form>

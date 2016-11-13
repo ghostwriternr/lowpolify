@@ -29,12 +29,12 @@ module.exports = function(app) {
         })
     });
 
-    app.post('/api/makeLowPoly/:name', function(req, res) {
-        console.log("Begin makeLowPoly");
+    app.post('/api/makeLowPoly/:name/:cFraction', function(req, res) {
+        console.log("Begin makeLowPoly with cFraction" + req.params.cFraction);
         var options = {
             mode: 'text',
             scriptPath: 'scripts/',
-            args: [path.resolve('image_dump/InputDump/' + req.params.name), path.resolve('image_dump/OutputDump/' + req.params.name)]
+            args: [path.resolve('image_dump/InputDump/' + req.params.name), path.resolve('image_dump/OutputDump/' + req.params.name), req.params.cFraction]
         };
         var pyshell = new PythonShell('lowpolify.py', options);
         pyshell.on('message', function(message) {

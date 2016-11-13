@@ -20,6 +20,7 @@ app.use('/scripts', express.static(__dirname + '/scripts/'));
 app.use('/imge_dump', express.static(__dirname + '/image_dump/'));
 app.use('/secrets', express.static(__dirname + '/app/secrets/'));
 app.use('/upload_module', express.static(__dirname + '/node_modules/ng-file-upload/dist/'));
+app.use('/slider_module', express.static(__dirname + '/node_modules/angularjs-slider/dist/'));
 
 // routes ======================================================================
 require('./app/routes')(app);

@@ -182,11 +182,16 @@ def main(args):
     else:
         inputImage = args[0]
         outputImage = None
+        cFraction = 0.15
         # Output destination specified
         if len(args) == 2:
             outputImage = args[1]
+        if len(args) == 3:
+            outputImage = args[1]
+            cFraction = float(args[2])
         # Call helper function
-        helper(inImage=inputImage, c=0.15, outImage=outputImage, show=False)
+        helper(inImage=inputImage, c=cFraction,
+               outImage=outputImage, show=False)
 
 if __name__ == '__main__':
     warnings.filterwarnings("ignore")
