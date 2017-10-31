@@ -41,3 +41,6 @@ image_dump
 
 # Secrets
 secrets
+
+# VSCode config
+.vscode

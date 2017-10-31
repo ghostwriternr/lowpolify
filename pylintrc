@@ -1,0 +1,3 @@
+[TYPECHECK]
+
+ignored-modules = cv2,numpy

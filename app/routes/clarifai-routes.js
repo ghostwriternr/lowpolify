@@ -4,11 +4,11 @@ var mime = require('mime');
 var request = require('request');
 var jsonfile = require('jsonfile');
 var secrets = "./app/secrets/secrets.json";
-var baseUrl = "https://api.clarifai.com/v1/";
-var clarifai = require(path.resolve(secrets));
+var baseUrl = "https://api.clarifai.com/v2/";
+var clarifaiKey = require(path.resolve(secrets));
 
-module.exports = function(app) {
-    app.post('/api/clarifai/getAccessToken', function(req, res) {
+module.exports = function (app) {
+    app.post('/api/clarifai/getAccessToken', function (req, res) {
         console.log("Begin getAccessToken");
         request.post({
             url: baseUrl + "token/",
@@ -17,7 +17,7 @@ module.exports = function(app) {
                 client_secret: clarifai.clientSecret,
                 grant_type: 'client_credentials'
             }
-        }, function(error, response, body) {
+        }, function (error, response, body) {
             if (error) {
                 console.log(error);
             } else {
@@ -36,23 +36,32 @@ module.exports = function(app) {
     });
 
 
-    app.post('/api/clarifai/getTags/:image', function(req, res) {
+    app.post('/api/clarifai/getTags/:image', function (req, res) {
         console.log("Begin getTags");
         var img = path.resolve('image_dump/InputDump/' + req.params.image);
-        fs.readFile(img, function(err, original_data) {
+        fs.readFile(img, function (err, original_data) {
             if (err) {
                 console.log(err);
             } else {
                 var base64Image = original_data.toString('base64');
                 request.post({
-                    url: baseUrl + "tag/",
-                    form: {
-                        encoded_data: base64Image
-                    },
+                    url: baseUrl + "models/aaa03c23b3724a16a56b629203edc62c/outputs",
+                    body: JSON.stringify({
+                        inputs: [
+                            {
+                                data: {
+                                    image: {
+                                        base64: base64Image
+                                    }
+                                }
+                            }
+                        ]
+                    }),
                     headers: {
-                        Authorization: "Bearer " + clarifai.access.access_token
+                        'Authorization': "Key " + clarifaiKey.apiKey,
+                        'Content-Type': "application/json"
                     }
-                }, function(error, response, body) {
+                }, function (error, response, body) {
                     if (error) {
                         console.log(error);
                     } else {
@@ -70,7 +79,7 @@ module.exports = function(app) {
         });
     });
 
-    app.get('/api/clarifai/tagDownload/:tagName/:imageName', function(req, res) {
+    app.get('/api/clarifai/tagDownload/:tagName/:imageName', function (req, res) {
         console.log("Begin download");
         var img = path.resolve('image_dump/OutputDump/' + req.params.imageName);
         var mimetype = mime.lookup(img);
@@ -80,7 +89,7 @@ module.exports = function(app) {
 
         var filestream = fs.createReadStream(img);
         filestream.pipe(res);
-        res.on('finish', function() {
+        res.on('finish', function () {
             console.log("Download complete");
         });
     });

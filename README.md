@@ -79,6 +79,14 @@ cd lowpolify
 npm install
 ```
 
+- Create a file `secrets.json` under the `app/secrets/` directory. The structure of the file should look like this:
+```json
+{
+  "apiKey": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+}
+```
+You can create your own apiKey at your [Clarifai Developer account page](https://clarifai.com/developer/account/keys).
+
 - Start the server using `node`
 ```Shell
 node server.js

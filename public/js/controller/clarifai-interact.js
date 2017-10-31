@@ -19,16 +19,17 @@ angular.module('clarifaiInteract', [])
             Clarifai.getTags(file)
                 .success(function(data) {
                     $scope.clarifaiResponse = data;
-                    if ($scope.clarifaiResponse.status_code == "TOKEN_EXPIRED" || $scope.clarifaiResponse.status_code == "TOKEN_INVALID" || $scope.clarifaiResponse.status_code == "TOKEN_APP_INVALID") {
+                    console.log($scope.clarifaiResponse);
+                    if ($scope.clarifaiResponse.status.code == "TOKEN_EXPIRED" || $scope.clarifaiResponse.status.code == "TOKEN_INVALID" || $scope.clarifaiResponse.status_code == "TOKEN_APP_INVALID") {
                         Clarifai.authenticate()
                             .success(function(newToken) {
                                 Clarifai.getTags(file)
                                     .success(function(newData) {
-                                        $scope.imageTags = newData.results[0].result.tag.classes.slice(0, 10);
+                                        $scope.imageTags = newData.outputs[0].data.concepts.slice(0, 10);
                                     });
                             });
                     } else
-                        $scope.imageTags = $scope.clarifaiResponse.results[0].result.tag.classes.slice(0, 10);
+                        $scope.imageTags = $scope.clarifaiResponse.outputs[0].data.concepts.slice(0, 10);
                 });
         };
 
