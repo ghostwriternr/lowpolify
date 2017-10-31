@@ -56,6 +56,7 @@ Now everybody loves to see the master at work, right? Right?? AMIRITE???
 ![Screenshot](images/Screenshot.png "Screenshot")
 
 ## Dependencies
+(v2 branch includes extra optimisations for portraits)
 - Node.js
 - Python3 (Along with the following python modules):
     + cv2
