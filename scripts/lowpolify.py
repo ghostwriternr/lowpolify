@@ -1,52 +1,46 @@
-import cv2
-import numpy as np
-import scipy
-from scipy.spatial import Delaunay
+'''Lowpolify any image using Delaunay triangulation'''
 import sys
 import warnings
 from multiprocessing import Process
+import cv2
+import numpy as np
+from scipy.spatial import Delaunay #pylint: disable-msg=E0611
 import sharedmem
 
-
-# Splits a list into n chunks
-
 def chunk(l, n):
+    '''Splits a list into n chunks'''
     for i in range(0, len(l), n):
         yield l[i:i + n]
 
-
-# Generates a portion of the final image
-
-def builder(part, tridex, lowPolyImage, highPolyImage):
+def builder(part, tridex, lowpoly_image, highpoly_image):
+    '''Generates a portion of the final image'''
     for tri in part:
-        lowPolyImage[tridex == tri, :] = np.mean(
-            highPolyImage[tridex == tri, :], axis=0)
+        lowpoly_image[tridex == tri, :] = np.mean(
+            highpoly_image[tridex == tri, :], axis=0)
 
-
-# Returns low poly image
-def getLowPoly(tris, highPolyImage):
-
-    # 'highPolyImage.shape[:2]' returns the dimensions of the image.
-    # 'np.ones(highPolyImage.shape[:2])' gives same size image, filled with 1.
+def get_lowpoly(tris, highpoly_image):
+    '''Returns low poly image'''
+    # 'highpoly_image.shape[:2]' returns the dimensions of the image.
+    # 'np.ones(highpoly_image.shape[:2])' gives same size image, filled with 1.
     # So subs contains an array of all coordinates of new array.
-    subs = np.transpose(np.where(np.ones(highPolyImage.shape[:2])))
+    subs = np.transpose(np.where(np.ones(highpoly_image.shape[:2])))
     subs = subs[:, :2]
     # Find the simplices in 'tris' containing the given points
     tridex = tris.find_simplex(subs)
     # Array of image dimensions with mapping to the repective simplices.
-    tridex = tridex.reshape(highPolyImage.shape[:2])
+    tridex = tridex.reshape(highpoly_image.shape[:2])
     # Retrieve the unique simplices from tridex
-    pTris = np.unique(tridex)
+    p_tris = np.unique(tridex)
     # Split the list into multiple parts, to enable parallel processing
-    chunks = list(chunk(pTris, len(pTris) // 4))
+    chunks = list(chunk(p_tris, len(p_tris) // 4))
     # Initialize output image (3-channel)
-    # lowPolyImage contains mean of all such points from highPolyimage, where
+    # lowpoly_image contains mean of all such points from highpoly_image, where
     # tridex = tri
-    lowPolyImage = sharedmem.empty(highPolyImage.shape)
-    lowPolyImage.fill(0)
+    lowpoly_image = sharedmem.empty(highpoly_image.shape)
+    lowpoly_image.fill(0)
     # Start 4 different processes to simultaneouly process different simplices
     processes = [Process(target=builder, args=(
-        chunks[i], tridex, lowPolyImage, highPolyImage)) for i in range(4)]
+        chunks[i], tridex, lowpoly_image, highpoly_image)) for i in range(4)]
     # Start each process
     for p in processes:
         p.start()
@@ -54,14 +48,12 @@ def getLowPoly(tris, highPolyImage):
     for p in processes:
         p.join()
     # unint8 represents Unsigned integer (0 to 255)
-    lowPolyImage = lowPolyImage.astype(np.uint8)
+    lowpoly_image = lowpoly_image.astype(np.uint8)
     # return low-poly image
-    return lowPolyImage
+    return lowpoly_image
 
-
-# Returns triangulations
-def getTriangulation(im, a=50, b=55, c=0.15, debug=False):
-
+def get_triangulation(im, a=50, b=55, c=0.15):
+    '''Returns triangulations'''
     # Using canny edge detection.
     #
     # Reference: http://docs.opencv.org/3.1.0/da/d22/tutorial_py_canny.html
@@ -76,7 +68,7 @@ def getTriangulation(im, a=50, b=55, c=0.15, debug=False):
     # on their connectivity.
     edges = cv2.Canny(im, a, b)
     # Set number of points for low-poly edge vertices
-    numPoints = np.where(edges)[0].size * c
+    num_points = int(np.where(edges)[0].size * c)
     # Return the indices of the elements that are non-zero.
     # 'nonzero' returns a tuple of arrays, one for each dimension of a,
     # containing the indices of the non-zero elements in that dimension.
@@ -86,27 +78,27 @@ def getTriangulation(im, a=50, b=55, c=0.15, debug=False):
     # So 'np.zeros(r.shape)' an array of this size, with all zeros.
     # 'rnd' is thus an array of this size, with all values as 'False'.
     rnd = np.zeros(r.shape) == 1
-    # Mark indices from beginning to 'numPoints - 1' as True.
-    rnd[:numPoints] = True
+    # Mark indices from beginning to 'num_points - 1' as True.
+    rnd[:num_points] = True
     # Shuffle
     np.random.shuffle(rnd)
-    # Randomly select 'numPoints' of points from the set of all edge vertices.
+    # Randomly select 'num_points' of points from the set of all edge vertices.
     r = r[rnd]
     c = c[rnd]
     # Number of rows and columns in image
     sz = im.shape
-    rMax = sz[0]
-    cMax = sz[1]
+    r_max = sz[0]
+    c_max = sz[1]
     # Co-ordinates of all randomly chosen points
     pts = np.vstack([r, c]).T
     # Append (0,0) to the vertical stack
     pts = np.vstack([pts, [0, 0]])
-    # Append (0,cMax) to the vertical stack
-    pts = np.vstack([pts, [0, cMax]])
-    # Append (rMax,0) to the vertical stack
-    pts = np.vstack([pts, [rMax, 0]])
-    # Append (rMax,cMax) to the vertical stack
-    pts = np.vstack([pts, [rMax, cMax]])
+    # Append (0,c_max) to the vertical stack
+    pts = np.vstack([pts, [0, c_max]])
+    # Append (r_max,0) to the vertical stack
+    pts = np.vstack([pts, [r_max, 0]])
+    # Append (r_max,c_max) to the vertical stack
+    pts = np.vstack([pts, [r_max, c_max]])
     # Append some random points to fill empty spaces
     pts = np.vstack([pts, np.random.randint(0, 750, size=(100, 2))])
     # Construct Delaunay Triangulation from these set of points.
@@ -115,83 +107,75 @@ def getTriangulation(im, a=50, b=55, c=0.15, debug=False):
     # Return triangulation
     return tris
 
-
-# Preprocessing helper
-def preProcess(highPolyImage, newSize=None):
-
+def pre_process(highpoly_image, newSize=None):
+    '''Preprocessing helper'''
     # Handle grayscale images
-    if highPolyImage.shape[2] == 1:
+    if highpoly_image.shape[2] == 1:
         # 'dstack' concatenates images along the third dimension
         # Similar to np.concatenate(tup, axis=2)
         # So basically, extending a gray scale image to a 3 channel image
-        highPolyImage = highPolyImage.dstack(
-            [highPolyImage, highPolyImage, highPolyImage])
+        highpoly_image = highpoly_image.dstack(
+            [highpoly_image, highpoly_image, highpoly_image])
     # Resize image. Easier to process.
     if newSize is not None:
-        if newSize < np.max(highPolyImage.shape[:2]):
-            scale = newSize / float(np.max(highPolyImage.shape[:2]))
-            highPolyImage = cv2.resize(
-                highPolyImage, (0, 0), fx=scale, fy=scale,
+        if newSize < np.max(highpoly_image.shape[:2]):
+            scale = newSize / float(np.max(highpoly_image.shape[:2]))
+            highpoly_image = cv2.resize(
+                highpoly_image, (0, 0), fx=scale, fy=scale,
                 interpolation=cv2.INTER_AREA)
     # Reduce noise in image using cv::cuda::fastNlMeansDenoisingColored
     # Reference: http://www.ipol.im/pub/art/2011/bcm_nlm/
-    highPolyImage = cv2.fastNlMeansDenoisingColored(
-        highPolyImage, None, 10, 10, 7, 21)
-    return highPolyImage
+    highpoly_image = cv2.fastNlMeansDenoisingColored(
+        highpoly_image, None, 10, 10, 7, 21)
+    return highpoly_image
 
-
-# Helper function
 def helper(inImage, c, outImage=None, show=False):
-
+    '''Helper function'''
     # Read the input image
-    highPolyImage = cv2.imread(inImage)
-    # Call 'preProcess' function
-    highPolyImage = preProcess(highPolyImage, newSize=750)
+    highpoly_image = cv2.imread(inImage)
+    # Call 'pre_process' function
+    highpoly_image = pre_process(highpoly_image, newSize=750)
     # Use Otsu's method for calculating thresholds
-    gray_image = cv2.cvtColor(highPolyImage, cv2.COLOR_BGR2GRAY)
-    highThresh, thresh_im = cv2.threshold(
+    gray_image = cv2.cvtColor(highpoly_image, cv2.COLOR_BGR2GRAY)
+    high_thresh, thresh_im = cv2.threshold(
         gray_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-    lowThresh = 0.1 * highThresh
-    # Call 'getTriangulation' function
-    tris = getTriangulation(highPolyImage, lowThresh,
-                            highThresh, c, debug=False)
-    # Call 'getLowPoly' function
-    lowPolyImage = getLowPoly(tris, highPolyImage)
-    if np.max(highPolyImage.shape[:2]) < 750:
-        scale = 750 / float(np.max(highPolyImage.shape[:2]))
-        lowPolyImage = cv2.resize(lowPolyImage, None, fx=scale,
-                                  fy=scale, interpolation=cv2.INTER_CUBIC)
-
+    low_thresh = 0.1 * high_thresh
+    # Call 'get_triangulation' function
+    tris = get_triangulation(highpoly_image, low_thresh, high_thresh, c)
+    # Call 'get_lowpoly' function
+    lowpoly_image = get_lowpoly(tris, highpoly_image)
+    if np.max(highpoly_image.shape[:2]) < 750:
+        scale = 750 / float(np.max(highpoly_image.shape[:2]))
+        lowpoly_image = cv2.resize(lowpoly_image, None, fx=scale,
+                                   fy=scale, interpolation=cv2.INTER_CUBIC)
     if show:
-        compare = np.hstack([highPolyImage, lowPolyImage])
+        compare = np.hstack([highpoly_image, lowpoly_image])
         cv2.imshow('Compare', compare)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
     if outImage is not None:
-        cv2.imwrite(outImage, lowPolyImage)
+        cv2.imwrite(outImage, lowpoly_image)
         print('Done')
 
-
-# Main function
 def main(args):
-
+    '''Main function'''
     # No input image
     if len(args) < 1:
         print('Invalid')
     # Input image specified
     else:
-        inputImage = args[0]
-        outputImage = None
-        cFraction = 0.15
+        input_image = args[0]
+        output_image = None
+        fraction = 0.15
         # Output destination specified
         if len(args) == 2:
-            outputImage = args[1]
+            output_image = args[1]
         if len(args) == 3:
-            outputImage = args[1]
-            cFraction = float(args[2])
+            output_image = args[1]
+            fraction = float(args[2])
         # Call helper function
-        helper(inImage=inputImage, c=cFraction,
-               outImage=outputImage, show=False)
+        helper(inImage=input_image, c=fraction,
+               outImage=output_image, show=False)
 
 if __name__ == '__main__':
     warnings.filterwarnings("ignore")
