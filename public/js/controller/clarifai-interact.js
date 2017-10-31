@@ -20,6 +20,8 @@ angular.module('clarifaiInteract', [])
                 .success(function(data) {
                     $scope.clarifaiResponse = data;
                     console.log($scope.clarifaiResponse);
+                    // This if block shouldn't be needed for Clarifai API v2.
+                    // TODO: Verify the above statement with corner cases.
                     if ($scope.clarifaiResponse.status.code == "TOKEN_EXPIRED" || $scope.clarifaiResponse.status.code == "TOKEN_INVALID" || $scope.clarifaiResponse.status_code == "TOKEN_APP_INVALID") {
                         Clarifai.authenticate()
                             .success(function(newToken) {

@@ -8,6 +8,7 @@ var baseUrl = "https://api.clarifai.com/v2/";
 var clarifaiKey = require(path.resolve(secrets));
 
 module.exports = function (app) {
+    //Deprecated
     app.post('/api/clarifai/getAccessToken', function (req, res) {
         console.log("Begin getAccessToken");
         request.post({
