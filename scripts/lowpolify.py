@@ -1,4 +1,5 @@
 '''Lowpolify any image using Delaunay triangulation'''
+import os
 import sys
 import warnings
 from multiprocessing import Process
@@ -6,6 +7,13 @@ import cv2
 import numpy as np
 from scipy.spatial import Delaunay #pylint: disable-msg=E0611
 import sharedmem
+import dlib
+import itertools
+
+# Path to predictor used in face detection model
+predictor_path = os.path.join(os.path.dirname(__file__), "shape_predictor_68_face_landmarks.dat")
+# Threshold for intra-triangle variance
+varhtresh = 25
 
 def chunk(l, n):
     '''Splits a list into n chunks'''
@@ -17,6 +25,54 @@ def builder(part, tridex, lowpoly_image, highpoly_image):
     for tri in part:
         lowpoly_image[tridex == tri, :] = np.mean(
             highpoly_image[tridex == tri, :], axis=0)
+
+def PolyArea(x,y):
+    '''Returns area of triangle'''
+    return 0.5*np.abs(np.dot(x,np.roll(y,1))-np.dot(y,np.roll(x,1)))
+
+def reduce_tail(l, index, threshold=1):
+    elm = l[index]
+    mask = np.linalg.norm(elm-l, axis=1) > threshold
+    mask[:index+1] = True  #ensure to return the head of the array unchanged
+    return l[mask]
+
+def my_reduce(z, threshold=1):
+    z = np.array(z)
+    index = 0
+    while True:
+        z = reduce_tail(z, index, threshold)
+        index += 1
+        if index == z.shape[0]:
+            break
+    return z.tolist()
+
+def divideHighVariance(tris, highPolyImage):
+    '''Divide triangles further if variance crosses a threshold'''
+    # print(tris.points.size)
+    subs = np.transpose(np.where(np.ones(highPolyImage.shape[:2])))
+    subs = subs[:, :2]
+    tridex = tris.find_simplex(subs)
+    tridex = tridex.reshape(highPolyImage.shape[:2])
+    pTris = np.unique(tridex)
+    for tri in pTris:
+        var3d = np.std(
+            highPolyImage[tridex == tri, :], axis=0)
+        var = sum(var3d) / 3
+        if var > varhtresh:
+            newPts = []
+            subarr = np.asarray(np.where(tridex == tri))
+            for i in range(subarr.shape[1]):
+                newPts.append([subarr[0][i], subarr[1][i]])
+            # x = [p[0] for p in newPts]
+            # y = [p[1] for p in newPts]
+            # centroid = (sum(x) / len(newPts), sum(y) / len(newPts))
+            # print(centroid)
+            randNewPts = [newPts[i] for i in np.random.randint(
+                0, len(newPts) - 1, size=int(round(0.4 * len(newPts))))]
+            tris.add_points(randNewPts)
+            # tris.add_points([[int(round(sum(x) / len(newPts))),
+            #                   int(round(sum(y), len(newPts)))]])
+    # print(tris.points.size)
 
 def get_lowpoly(tris, highpoly_image):
     '''Returns low poly image'''
@@ -52,7 +108,7 @@ def get_lowpoly(tris, highpoly_image):
     # return low-poly image
     return lowpoly_image
 
-def get_triangulation(im, a=50, b=55, c=0.15):
+def get_triangulation(im, gray_image, a=50, b=55, c=0.15, show=False):
     '''Returns triangulations'''
     # Using canny edge detection.
     #
@@ -66,7 +122,14 @@ def get_triangulation(im, a=50, b=55, c=0.15):
     # and those below minVal are sure to be non-edges, so discarded. Those who
     # lie between these two thresholds are classified edges or non-edges based
     # on their connectivity.
-    edges = cv2.Canny(im, a, b)
+    detector = dlib.get_frontal_face_detector()
+    predictor = dlib.shape_predictor(predictor_path)
+    edges = cv2.Canny(gray_image, a, b)
+    if show:
+        cv2.imshow('Canny', edges)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+        win = dlib.image_window()
     # Set number of points for low-poly edge vertices
     num_points = int(np.where(edges)[0].size * c)
     # Return the indices of the elements that are non-zero.
@@ -101,14 +164,43 @@ def get_triangulation(im, a=50, b=55, c=0.15):
     pts = np.vstack([pts, [r_max, c_max]])
     # Append some random points to fill empty spaces
     pts = np.vstack([pts, np.random.randint(0, 750, size=(100, 2))])
+    # print(len(pts))
+    # pts = my_reduce(pts, 5)
+    # print(len(pts))
+    dets = detector(im, 1)
+    # print("Number of faces detected: {}".format(len(dets)))
+    if show:
+        win.clear_overlay()
+        win.set_image(im)
+    for k, d in enumerate(dets):
+        shape = predictor(im, d)
+        for i in range(shape.num_parts):
+            pts = np.vstack([pts, [shape.part(i).x, shape.part(i).y]])
+        if show:
+            win.add_overlay(shape)
+    if show:
+        win.add_overlay(dets)
+        dlib.hit_enter_to_continue()
     # Construct Delaunay Triangulation from these set of points.
     # Reference: https://en.wikipedia.org/wiki/Delaunay_triangulation
-    tris = Delaunay(pts)
+    tris = Delaunay(pts, incremental=True)
+    # tris_vertices = pts[tris.simplices]
+    # for tri in range(tris_vertices.shape[0]):
+    #     x_coords = []
+    #     y_coords = []
+    #     print(tris_vertices[tri])
+    #     for coord in range(tris_vertices.shape[1]):
+    #         x_coords.append(tris_vertices[tri][coord][0])
+    #         y_coords.append(tris_vertices[tri][coord][1])
+    # divideHighVariance(tris, im)
+    tris.close()
+    # exit(0)
     # Return triangulation
     return tris
 
 def pre_process(highpoly_image, newSize=None):
     '''Preprocessing helper'''
+    print('Preprocessing')
     # Handle grayscale images
     if highpoly_image.shape[2] == 1:
         # 'dstack' concatenates images along the third dimension
@@ -125,23 +217,51 @@ def pre_process(highpoly_image, newSize=None):
                 interpolation=cv2.INTER_AREA)
     # Reduce noise in image using cv::cuda::fastNlMeansDenoisingColored
     # Reference: http://www.ipol.im/pub/art/2011/bcm_nlm/
-    highpoly_image = cv2.fastNlMeansDenoisingColored(
+    noiseless_highpoly_image = cv2.fastNlMeansDenoisingColored(
         highpoly_image, None, 10, 10, 7, 21)
-    return highpoly_image
+    print('Preprocessing complete')
+    return highpoly_image, noiseless_highpoly_image
 
-def helper(inImage, c, outImage=None, show=False):
+def helper(inImage, c=0.3, outImage=None, show=False):
     '''Helper function'''
     # Read the input image
     highpoly_image = cv2.imread(inImage)
     # Call 'pre_process' function
-    highpoly_image = pre_process(highpoly_image, newSize=750)
+    highpoly_image, noiseless_highpoly_image = pre_process(highpoly_image, newSize=750)
+    print('Begin thresholding')
     # Use Otsu's method for calculating thresholds
-    gray_image = cv2.cvtColor(highpoly_image, cv2.COLOR_BGR2GRAY)
+    gray_image = cv2.cvtColor(noiseless_highpoly_image, cv2.COLOR_BGR2GRAY)
+    ycbcr_image = cv2.cvtColor(noiseless_highpoly_image, cv2.COLOR_RGB2YCrCb)
+    for xdim in range(ycbcr_image.shape[0]):
+        for ydim in range(ycbcr_image.shape[1]):
+            ycbcr_image[xdim][ydim] = ycbcr_image[xdim][ydim][0]
+    ycbcr_image = ycbcr_image[:, :, 0]
+    clahe = cv2.createCLAHE()
+    normalized_gray_image = clahe.apply(gray_image)
+    if show:
+        compare = np.hstack([gray_image, normalized_gray_image])
+        cv2.imshow('gray images', compare)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
     high_thresh, thresh_im = cv2.threshold(
-        gray_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-    low_thresh = 0.1 * high_thresh
+        ycbcr_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    # thresh_im = cv2.adaptiveThreshold(
+    #     gray_image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
+    if show:
+        cv2.imshow('otsu image', thresh_im)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+    low_thresh = 0.5 * high_thresh
+    blurred_gray_image = cv2.GaussianBlur(gray_image, (5, 5), 0)
+    sharp_gray_image = cv2.addWeighted(gray_image, 1, blurred_gray_image, 1, 0)
+    if show:
+        cv2.imshow('Sharp gray image', sharp_gray_image)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+    print('Triangulating')
     # Call 'get_triangulation' function
-    tris = get_triangulation(highpoly_image, low_thresh, high_thresh, c)
+    tris = get_triangulation(highpoly_image, sharp_gray_image, low_thresh, high_thresh, c)
+    print('Rendering complete. Fetching...')
     # Call 'get_lowpoly' function
     lowpoly_image = get_lowpoly(tris, highpoly_image)
     if np.max(highpoly_image.shape[:2]) < 750:
@@ -173,6 +293,7 @@ def main(args):
         if len(args) == 3:
             output_image = args[1]
             fraction = float(args[2])
+        print("Processing started")
         # Call helper function
         helper(inImage=input_image, c=fraction,
                outImage=output_image, show=False)
