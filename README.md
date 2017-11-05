@@ -62,6 +62,7 @@ Now everybody loves to see the master at work, right? Right?? AMIRITE???
     + numpy
     + scipy
     + sharedmem
+    + dlib
 
 ## How to use
 - Clone the repo
@@ -86,6 +87,8 @@ npm install
 }
 ```
 You can create your own apiKey at your [Clarifai Developer account page](https://clarifai.com/developer/account/keys).
+
+- Download and extract the .dat file from [dlib](http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2) for facial features detection. Place the extracted file under `scripts` (the same directory as the `lowpolify.py` script).
 
 - Start the server using `node`
 ```Shell
