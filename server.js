@@ -5,6 +5,10 @@ var port = process.env.PORT || 8080; // set the port
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
+var cookieParser = require('cookie-parser');
+
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
 // configuration ===============================================================
 
@@ -15,6 +19,8 @@ app.use(bodyParser.json()); // parse application/json
 app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse application/vnd.api+json as json
 app.use(methodOverride('X-HTTP-Method-Override')); // override with the X-HTTP-Method-Override header in the request
 
+app.use(cookieParser());
+
 // redirections
 app.use('/scripts', express.static(__dirname + '/scripts/'));
 app.use('/imge_dump', express.static(__dirname + '/image_dump/'));
@@ -23,8 +29,8 @@ app.use('/upload_module', express.static(__dirname + '/node_modules/ng-file-uplo
 app.use('/slider_module', express.static(__dirname + '/node_modules/angularjs-slider/dist/'));
 
 // routes ======================================================================
-require('./app/routes')(app);
+require('./app/routes')(app, io);
 
 // listen (start app with node server.js) ======================================
-app.listen(port);
+server.listen(port);
 console.log("The magic begins on port " + port);

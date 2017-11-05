@@ -32,6 +32,8 @@
     <!-- load our node service -->
     <script src="js/core.js"></script>
     <!-- load our main application -->
+    <script src="/socket.io/socket.io.js"></script>
+    
 </head>
 <!-- SET THE CONTROLLER -->
 
@@ -88,7 +90,10 @@
                                             <animateTransform attributeName="transform" type="rotate" from="0 50 65" to="120 50 65" repeatCount="indefinite" dur="1s"></animateTransform>
                                         </path>
                                     </svg>
-                                    <img class="drop-box-full img-responsive" ng-src="data:image/jpeg;base64,{{outputFilePath}}">
+                                    <div ng-show="isProcessing()">{{currentStatus}}</div>
+                                    <div class="row" ng-show="outputFilePath.length>0">
+                                        <img class="drop-box-full img-responsive" ng-src="data:image/jpeg;base64,{{outputFilePath}}">
+                                    </div>
                                 </div>
                             </div>
                         </form>

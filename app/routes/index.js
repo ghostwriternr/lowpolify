@@ -31,9 +31,9 @@ var cleaner = schedule.scheduleJob('0 * * * * *', function() {
     });
 });
 
-module.exports = function(app) {
+module.exports = function(app, io) {
 
-    require('./lowpolify-routes.js')(app);
+    require('./lowpolify-routes.js')(app, io);
     require('./clarifai-routes.js')(app);
 
     app.get('*', function(req, res) {
