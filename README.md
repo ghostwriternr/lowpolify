@@ -15,30 +15,28 @@
 ![Warrior](images/welcome.gif "Warrior")
 
 PS. Formal introductions are yet to begin, in case you were wondering. :sweat_smile:  
-PPS. The warrior above is also just a hoax to get you excited. Seriously, this ain't that good. :sweat_smile::sweat_smile:
 
 ## Introduction
 The goal of __lowpolify__ is quite simple. Generate low poly versions of any given image.
 
-Now what is 'low poly' you may ask.  
-Guessed that. Haa! :grin:  
+Now what is 'low poly' you may ask.
 
-Here's what Wikipedia has for you: _Low poly is a polygon mesh in 3D computer graphics that has a relatively small number of polygons. Low poly meshes occur in real-time applications (e.g. games) and contrast with high poly meshes in animated movies and special effects of the same era. The term low poly is used in both a techni..._ **_yada yada yada_** you get the idea. :information_desk_person::information_desk_person:  
+Here's what Wikipedia has for you: _Low poly is a polygon mesh in 3D computer graphics that has a relatively small number of polygons. Low poly meshes occur in real-time applications (e.g. games) and contrast with high poly meshes in animated movies and special effects of the same era. The term low poly is used in both a techni..._ **_yada yada yada_** you get the idea. Basically objects composed of only polygons. :information_desk_person::information_desk_person:  
 
-And if you'd like to skip all the chit chat, here's the **DEMO**. _Arr, matey, thar be ye booty!_
+If you'd like to skip all the chit chat, here's the **DEMO**. _Arr, matey, thar be ye booty!_
 http://lowpolify.herokuapp.com/
 
 ## Approach
 Take an image, lowpolify it and **poof**!! :boom: LOW POLY, BABY!! :dancer::dancer:  
 
-In subtler terms, here's a TLDR for nothing:
+Here's an ELI5 TLDR :baby: :
+- Pre-process the input image to remove noise and reduce image size
 - Detect edges in the input image
-- Choose a random subset of all points that belong to an edge
-- Triangulate
-- Fill the triangles with the mean value of all pixels contained by it.
+- If the image contains humans faces, detect facial features as well
+- Choose a random subset of the above detected points / edges
+- Triangulate using Delaunay Triangulation
+- Fill the triangles with the mean value of all pixels contained by it (in parallel for faster computation)
 - LOW POLY, BABY! :dancer::dancer:  
-
-(That feels like an oversimplification, but ELI5 :baby: is the gold standard.)
 
 ## Sample output
 Lo and Behold!
