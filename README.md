@@ -23,8 +23,8 @@ Now what is 'low poly' you may ask.
 
 Here's what Wikipedia has for you: _Low poly is a polygon mesh in 3D computer graphics that has a relatively small number of polygons. Low poly meshes occur in real-time applications (e.g. games) and contrast with high poly meshes in animated movies and special effects of the same era. The term low poly is used in both a techni..._ **_yada yada yada_** you get the idea. Basically objects composed of only polygons. :information_desk_person::information_desk_person:  
 
-If you'd like to skip all the chit chat, here's the **DEMO**. _Arr, matey, thar be ye booty!_
-http://lowpolify.herokuapp.com/
+If you'd like to skip all the chit chat, here's the **DEMO**. _Arr, matey, thar be ye booty!_  
+https://lowpolify.ghostwriternr.me/
 
 ## Approach
 Take an image, lowpolify it and **poof**!! :boom: LOW POLY, BABY!! :dancer::dancer:  
