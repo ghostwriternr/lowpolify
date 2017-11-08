@@ -63,6 +63,21 @@ Now everybody loves to see the master at work, right? Right?? AMIRITE???
     + dlib
 
 ## How to use
+### If you only need to run the script
+- Download the core script from [here](https://raw.githubusercontent.com/ghostwriternr/lowpolify/master/scripts/lowpolify.py).
+```Shell
+wget https://raw.githubusercontent.com/ghostwriternr/lowpolify/master/scripts/lowpolify.py
+```
+
+- Download and extract the .dat file from [dlib](http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2) for facial features detection. Place the extracted file under `scripts` (the same directory as the `lowpolify.py` script).
+
+- Run the python script as:
+```Shell
+python lowpolify.py <input-image> <output-image> <cFraction>
+```
+Here, cFraction denotes the fraction of points from original edges to be taken for triangulation.
+
+### If you would like to use the webapp
 - Clone the repo
 ```Shell
 git clone https://github.com/ghostwriternr/lowpolify
