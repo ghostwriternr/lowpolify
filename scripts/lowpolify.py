@@ -1,6 +1,7 @@
 '''Lowpolify any image using Delaunay triangulation'''
 import os
 import sys
+import random
 import warnings
 from multiprocessing import Process
 import cv2
@@ -108,7 +109,7 @@ def get_lowpoly(tris, highpoly_image):
     # return low-poly image
     return lowpoly_image
 
-def get_triangulation(im, gray_image, a=50, b=55, c=0.15, show=False):
+def get_triangulation(im, gray_image, a=50, b=55, c=0.15, show=False, randomize=False):
     '''Returns triangulations'''
     # Using canny edge detection.
     #
@@ -154,6 +155,16 @@ def get_triangulation(im, gray_image, a=50, b=55, c=0.15, show=False):
     c_max = sz[1]
     # Co-ordinates of all randomly chosen points
     pts = np.vstack([r, c]).T
+    if randomize:
+        rand_offset = 50
+        rand_dirs = [(0, rand_offset), (-rand_offset, 0), (0, -rand_offset), (rand_offset, 0)]
+        rnd_count = 0
+        for point in pts:
+            if random.random() < 0.3:
+                rnd_count += 1
+                rand_dir = random.randint(0, 3)
+                point[0] += rand_dirs[rand_dir][0]
+                point[1] += rand_dirs[rand_dir][1]
     # Append (0,0) to the vertical stack
     pts = np.vstack([pts, [0, 0]])
     # Append (0,c_max) to the vertical stack
@@ -239,7 +250,7 @@ def helper(inImage, c=0.3, outImage=None, show=False):
     clahe = cv2.createCLAHE()
     normalized_gray_image = clahe.apply(gray_image)
     if show:
-        compare = np.hstack([gray_image, normalized_gray_image])
+        compare = np.hstack([gray_image, ycbcr_image])
         cv2.imshow('gray images', compare)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
@@ -252,18 +263,19 @@ def helper(inImage, c=0.3, outImage=None, show=False):
         cv2.waitKey(0)
         cv2.destroyAllWindows()
     low_thresh = 0.5 * high_thresh
-    blurred_gray_image = cv2.GaussianBlur(gray_image, (5, 5), 0)
-    sharp_gray_image = cv2.addWeighted(gray_image, 1, blurred_gray_image, 1, 0)
+    blurred_gray_image = cv2.GaussianBlur(gray_image, (0, 0), 3)
+    sharp_gray_image = cv2.addWeighted(gray_image, 2.5, blurred_gray_image, -1, 0)
     if show:
         cv2.imshow('Sharp gray image', sharp_gray_image)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
     print('Triangulating')
     # Call 'get_triangulation' function
-    tris = get_triangulation(highpoly_image, sharp_gray_image, low_thresh, high_thresh, c)
-    print('Rendering complete. Fetching...')
+    tris = get_triangulation(highpoly_image, sharp_gray_image, low_thresh, high_thresh, c, show)
+    print('Triangulation complete. Begin rendering...')
     # Call 'get_lowpoly' function
     lowpoly_image = get_lowpoly(tris, highpoly_image)
+    print('Rendering complete')
     if np.max(highpoly_image.shape[:2]) < 750:
         scale = 750 / float(np.max(highpoly_image.shape[:2]))
         lowpoly_image = cv2.resize(lowpoly_image, None, fx=scale,
