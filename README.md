@@ -23,8 +23,8 @@ Now what is 'low poly' you may ask.
 
 Here's what Wikipedia has for you: _Low poly is a polygon mesh in 3D computer graphics that has a relatively small number of polygons. Low poly meshes occur in real-time applications (e.g. games) and contrast with high poly meshes in animated movies and special effects of the same era. The term low poly is used in both a techni..._ **_yada yada yada_** you get the idea. Basically objects composed of only polygons. :information_desk_person::information_desk_person:  
 
-If you'd like to skip all the chit chat, here's the **DEMO**. _Arr, matey, thar be ye booty!_
-http://lowpolify.herokuapp.com/
+If you'd like to skip all the chit chat, here's the **DEMO**. _Arr, matey, thar be ye booty!_  
+https://lowpolify.ghostwriternr.me/
 
 ## Approach
 Take an image, lowpolify it and **poof**!! :boom: LOW POLY, BABY!! :dancer::dancer:  
@@ -63,6 +63,21 @@ Now everybody loves to see the master at work, right? Right?? AMIRITE???
     + dlib
 
 ## How to use
+### If you only need to run the script
+- Download the core script from [here](https://raw.githubusercontent.com/ghostwriternr/lowpolify/master/scripts/lowpolify.py).
+```Shell
+wget https://raw.githubusercontent.com/ghostwriternr/lowpolify/master/scripts/lowpolify.py
+```
+
+- Download and extract the .dat file from [dlib](http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2) for facial features detection. Place the extracted file under `scripts` (the same directory as the `lowpolify.py` script).
+
+- Run the python script as:
+```Shell
+python lowpolify.py <input-image> <output-image> <cFraction>
+```
+Here, cFraction denotes the fraction of points from original edges to be taken for triangulation.
+
+### If you would like to use the webapp
 - Clone the repo
 ```Shell
 git clone https://github.com/ghostwriternr/lowpolify
