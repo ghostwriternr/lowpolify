@@ -22,26 +22,22 @@
   "homepage": "https://github.com/ghostwriternr/lowpolify#readme",
   "dependencies": {
     "angular": "^1.5.8",
-    "angularjs-slider": "^5.8.7",
+    "angularjs-slider": "^6.5.1",
     "body-parser": "^1.15.2",
     "cookie-parser": "^1.4.3",
     "express": "^4.14.0",
-    "jsonfile": "^2.4.0",
+    "jsonfile": "^4.0.0",
     "method-override": "^2.3.6",
-    "mime": "^1.3.4",
+    "mime": "^2.3.1",
     "morgan": "^1.7.0",
     "multer": "^1.2.0",
     "ng-file-upload": "^12.2.12",
     "node-schedule": "^1.2.0",
-    "python-shell": "^0.4.0",
+    "python-shell": "^0.5.0",
     "request": "^2.75.0",
     "socket.io": "^2.0.4"
   },
   "devDependencies": {
     "jshint": "^2.9.4"
-  },
-  "engines": {
-    "node": "4.5.0",
-    "npm": "3.10.9"
   }
 }
