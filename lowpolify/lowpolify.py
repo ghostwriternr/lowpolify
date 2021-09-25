@@ -1,19 +1,16 @@
 '''Lowpolify any image using Delaunay triangulation'''
-import os
-import sys
 import random
 from multiprocessing import Process
+
 import cv2
 import numpy as np
-from scipy.spatial import Delaunay
+from scipy.spatial import Delaunay  #pylint: disable-msg=E0611
 import sharedmem
 import dlib
+import face_recognition_models
 
 # Path to predictor used in face detection model
-predictor_path = os.path.join(
-    os.path.dirname(__file__),
-    "shape_predictor_68_face_landmarks.dat",
-)
+predictor_model = face_recognition_models.pose_predictor_model_location()
 # Threshold for intra-triangle variance
 varhtresh = 25
 
@@ -143,7 +140,7 @@ def get_triangulation(im,
     # lie between these two thresholds are classified edges or non-edges based
     # on their connectivity.
     detector = dlib.get_frontal_face_detector()
-    predictor = dlib.shape_predictor(predictor_path)
+    predictor = dlib.shape_predictor(predictor_model)
     edges = cv2.Canny(gray_image, a, b)
     if show:
         cv2.imshow('Canny', edges)
@@ -256,10 +253,11 @@ def pre_process(highpoly_image, newSize=None):
     return highpoly_image, noiseless_highpoly_image
 
 
-def helper(inImage, c=0.3, outImage=None, show=False):
+def lowpolify(inImage, c=0.3, outImage=None, show=False):
     '''Helper function'''
     # Read the input image
-    highpoly_image = cv2.imread(inImage)
+    npimg = np.fromstring(inImage, np.uint8)
+    highpoly_image = cv2.imdecode(npimg, cv2.IMREAD_COLOR)
     # Call 'pre_process' function
     highpoly_image, noiseless_highpoly_image = pre_process(highpoly_image,
                                                            newSize=750)
@@ -304,11 +302,13 @@ def helper(inImage, c=0.3, outImage=None, show=False):
     print('Rendering complete')
     if np.max(highpoly_image.shape[:2]) < 750:
         scale = 750 / float(np.max(highpoly_image.shape[:2]))
-        lowpoly_image = cv2.resize(lowpoly_image,
-                                   None,
-                                   fx=scale,
-                                   fy=scale,
-                                   interpolation=cv2.INTER_CUBIC)
+        lowpoly_image = cv2.resize(
+            lowpoly_image,
+            None,
+            fx=scale,
+            fy=scale,
+            interpolation=cv2.INTER_CUBIC,
+        )
     if show:
         compare = np.hstack([highpoly_image, lowpoly_image])
         cv2.imshow('Compare', compare)
@@ -317,31 +317,4 @@ def helper(inImage, c=0.3, outImage=None, show=False):
     if outImage is not None:
         cv2.imwrite(outImage, lowpoly_image)
         print('Done')
-
-
-def main(args):
-    '''Main function'''
-    # No input image
-    if len(args) < 1:
-        print('Invalid')
-    # Input image specified
-    else:
-        input_image = args[0]
-        output_image = None
-        fraction = 0.15
-        # Output destination specified
-        if len(args) == 2:
-            output_image = args[1]
-        if len(args) == 3:
-            output_image = args[1]
-            fraction = float(args[2])
-        print("Processing started")
-        # Call helper function
-        helper(inImage=input_image,
-               c=fraction,
-               outImage=output_image,
-               show=False)
-
-
-if __name__ == '__main__':
-    main(sys.argv[1:])
+    return cv2.imencode('.jpg', lowpoly_image)[1]
