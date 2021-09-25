@@ -8,6 +8,7 @@ coverage==4.5.4
 Sphinx==1.8.5
 twine==1.14.0
 Click==7.0
+cmake==3.21.2
 dlib==19.22.0
 face-recognition==1.3.0
 numpy==1.21.0
